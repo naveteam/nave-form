@@ -24,6 +24,9 @@ export default {
     },
   ],
   plugins: [
+    eslint({
+      fix: true,
+    }),
     external(),
     postcss({
       modules: true,
@@ -33,6 +36,5 @@ export default {
     resolve(),
     commonjs(),
     babel(),
-    eslint(),
   ],
 }

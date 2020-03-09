@@ -43,6 +43,18 @@ const masks = {
         return `R$ ${parseInt(numbers)}`.replace(/(\d+)(\d{2})/, '$1,$2').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
     }
   },
+  zipCode: value => {
+    const numbers = value.replace(/\D/g, '')
+
+    switch (true) {
+      case numbers.length <= 5:
+        return numbers
+      case numbers.length <= 8:
+        return numbers.replace(/(\d{5})(\d{1,3})/, '$1-$2')
+      default:
+        return numbers.replace(/(\d{5})(\d{1,3})(.+?)/, '$1-$2')
+    }
+  },
 }
 
 const remove = {
@@ -56,7 +68,9 @@ const remove = {
     return value.replace(/\D/g, '')
   },
   currency: value => {
-    console.log(value.replace(/\D/g, ''))
+    return value.replace(/\D/g, '')
+  },
+  zipCode: value => {
     return value.replace(/\D/g, '')
   },
 }
