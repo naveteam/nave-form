@@ -2,6 +2,7 @@ import React from 'react'
 import { useForm, FormContext } from 'react-hook-form'
 
 import { masks } from '../helpers'
+import { forceArray } from '../utils'
 
 const Form = ({ defaultValues, children, onSubmit, unmask }) => {
   const methods = useForm({ defaultValues })
@@ -9,15 +10,20 @@ const Form = ({ defaultValues, children, onSubmit, unmask }) => {
 
   const prepareSubmit = values => {
     if (unmask) {
-      const unmasks = children.reduce(
-        (acc, child) => ({
-          ...acc,
-          ...((child.props.pattern || child.props.mask) && {
-            [child.props.name]: child.props.pattern || child.props.mask,
-          }),
-        }),
-        {},
-      )
+      const testMasks = children =>
+        children.reduce((acc, child) => {
+          if (child.type.name === 'If') {
+            return { ...acc, ...testMasks(forceArray(child.props.children)) }
+          }
+          return {
+            ...acc,
+            ...((child.props.pattern || child.props.mask) && {
+              [child.props.name]: child.props.pattern || child.props.mask,
+            }),
+          }
+        }, {})
+
+      const unmasks = testMasks(children)
 
       const newValues = Object.keys(unmasks).length
         ? Object.entries(values).reduce((acc, [key, value]) => {

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Input, If } from 'nave-form'
+import { Form, Input, If, ArrayOf } from 'nave-form'
 
 const App = () => {
   const onSubmit = data => console.log(data)
@@ -25,6 +25,11 @@ const App = () => {
           label='Patrimônio'
         />
       </If>
+      <ArrayOf name='pets'>
+        <Input name='name' required='Campo obrigatório' placeholder='Tobias Bittencourt' label='Nome do Pet' />
+        <Input name='specie' required='Campo obrigatório' placeholder='Cachorro' label='Espécie' />
+        <Input name='cpf' pattern='cpf' required='Campo obrigatório' placeholder='000.000.000-00' label='CPF' />
+      </ArrayOf>
 
       <button type='submit'>submit</button>
     </Form>
