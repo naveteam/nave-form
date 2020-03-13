@@ -3,12 +3,12 @@ import { useFieldArray, useFormContext } from 'react-hook-form'
 
 import { forceArray } from '../utils'
 
-const ArrayOf = ({ name, addText = '+', removeText = '-', children }) => {
+const ArrayOf = ({ name, addText = '+', removeText = '-', children, className }) => {
   const { control } = useFormContext()
   const { fields, append, remove } = useFieldArray({ control, name })
 
   return (
-    <div>
+    <div className={className}>
       {fields.map((item, index) => {
         return (
           <fieldset key={item.id}>
