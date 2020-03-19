@@ -1,9 +1,11 @@
 import React, { useState, useMemo, useCallback } from 'react'
+import styled from 'styled-components'
 import { useFormContext } from 'react-hook-form'
 
 import { masks, values, validations } from '../helpers'
+import { colors } from '../constants'
 
-const Input = ({ name, required, validate, mask, pattern, label, placeholder, className }) => {
+const Input = ({ name, required, validate, mask, pattern, label, placeholder, className, variant }) => {
   const [touched, setTouched] = useState(false)
   const [error, setError] = useState('')
   const { register, setValue, errors, triggerValidation } = useFormContext()
@@ -12,11 +14,12 @@ const Input = ({ name, required, validate, mask, pattern, label, placeholder, cl
     const classArr = []
 
     className && classArr.push(className)
+    variant && classArr.push(variant)
     touched && classArr.push('touched')
     error && classArr.push('error')
 
     return classArr.join(' ')
-  }, [className, touched, error])
+  }, [className, touched, error, variant])
 
   const onBlur = useCallback(() => {
     setTouched(true)
@@ -42,7 +45,7 @@ const Input = ({ name, required, validate, mask, pattern, label, placeholder, cl
 
   return useMemo(
     () => (
-      <div className={mountClassName()}>
+      <Styles className={mountClassName()}>
         {label && <label>{label}</label>}
         <input
           name={name}
@@ -53,10 +56,40 @@ const Input = ({ name, required, validate, mask, pattern, label, placeholder, cl
           placeholder={placeholder}
         />
         {touched && error && <span>{error}</span>}
-      </div>
+      </Styles>
     ),
     [name, onChange, placeholder, register, required, validate, touched, pattern, label, error, mountClassName],
   )
 }
+
+const Styles = styled.div`
+  &.material {
+    input {
+      border: 0;
+      border-bottom: 1px solid ${colors.grey};
+      outline: none;
+      transition: all 0.2s ease-in-out;
+      &:hover,
+      &:focus {
+        border-bottom: 2px solid ${colors.black};
+      }
+      &:-webkit-autofill {
+        transition-delay: 99999s;
+        -webkit-transition-delay: 99999s;
+      }
+    }
+    &.error {
+      input {
+        border-bottom: 2px solid ${colors.red};
+      }
+      label {
+        color: ${colors.red};
+      }
+      span {
+        color: ${colors.red};
+      }
+    }
+  }
+`
 
 export default Input

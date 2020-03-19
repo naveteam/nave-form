@@ -14,6 +14,7 @@ const App = () => {
         required='Campo obrigatório'
         placeholder='00/00/0000'
         label='Data de Nascimento'
+        variant='material'
       />
       <Input name='zipCode' pattern='zipCode' required='Campo obrigatório' placeholder='00000-000' label='CEP' />
       <If conditions={[{ cpf: '042.104.390-37' }]}>
