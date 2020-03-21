@@ -1,4 +1,6 @@
 import React from 'react'
+import { Helmet } from 'react-helmet'
+import { createGlobalStyle } from 'styled-components'
 import { useForm, FormContext } from 'react-hook-form'
 
 import { masks } from '../helpers'
@@ -7,6 +9,12 @@ import { forceArray } from '../utils'
 const Form = ({ defaultValues, children, onSubmit, unmask }) => {
   const methods = useForm({ defaultValues })
   const { handleSubmit } = methods
+
+  const GlobalStyle = createGlobalStyle`
+    .form {
+      font-family: 'Roboto', sans-serif;
+    }
+  `
 
   const prepareSubmit = values => {
     if (unmask) {
@@ -53,6 +61,9 @@ const Form = ({ defaultValues, children, onSubmit, unmask }) => {
 
   return (
     <FormContext {...methods}>
+      <Helmet>
+        <link href='https://fonts.googleapis.com/css?family=Roboto&display=swap' rel='stylesheet' />
+      </Helmet>
       <form onSubmit={handleSubmit(prepareSubmit)} className='form'>
         {Array.isArray(children)
           ? children.map(child => {
@@ -67,6 +78,7 @@ const Form = ({ defaultValues, children, onSubmit, unmask }) => {
             })
           : children}
       </form>
+      <GlobalStyle />
     </FormContext>
   )
 }

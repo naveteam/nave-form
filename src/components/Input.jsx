@@ -6,6 +6,7 @@ import { masks, values, validations } from '../helpers'
 import { colors } from '../constants'
 
 const Input = ({ name, required, validate, mask, pattern, label, placeholder, className, variant }) => {
+  const [filled, setFilled] = useState(false)
   const [touched, setTouched] = useState(false)
   const [error, setError] = useState('')
   const { register, setValue, errors, triggerValidation } = useFormContext()
@@ -15,7 +16,9 @@ const Input = ({ name, required, validate, mask, pattern, label, placeholder, cl
 
     className && classArr.push(className)
     variant && classArr.push(variant)
+
     touched && classArr.push('touched')
+    filled && classArr.push('filled')
     error && classArr.push('error')
 
     return classArr.join(' ')
@@ -34,6 +37,7 @@ const Input = ({ name, required, validate, mask, pattern, label, placeholder, cl
         : setValue(name, e.target.value, true)
       triggerValidation()
       setError(values.get(errors, name)?.message)
+      e.target.value ? setFilled(true) : setFilled(false)
     },
     [mask, setValue, name, pattern],
   )
@@ -45,9 +49,9 @@ const Input = ({ name, required, validate, mask, pattern, label, placeholder, cl
 
   return useMemo(
     () => (
-      <Styles className={mountClassName()}>
-        {label && <label>{label}</label>}
-        <input
+      <Container className={mountClassName()}>
+        {console.log(error)}
+        <StyledInput
           name={name}
           ref={ref}
           onChange={onChange}
@@ -55,40 +59,84 @@ const Input = ({ name, required, validate, mask, pattern, label, placeholder, cl
           style={{ display: 'block' }}
           placeholder={placeholder}
         />
-        {touched && error && <span>{error}</span>}
-      </Styles>
+        {label && <Label>{label}</Label>}
+        {touched && error && <Error>{error}</Error>}
+      </Container>
     ),
     [name, onChange, placeholder, register, required, validate, touched, pattern, label, error, mountClassName],
   )
 }
 
-const Styles = styled.div`
+const Container = styled.div`
   &.material {
-    input {
-      border: 0;
-      border-bottom: 1px solid ${colors.grey};
-      outline: none;
+    height: 50px;
+    margin: 0;
+    position: relative;
+    width: 100%;
+  }
+`
+
+const Label = styled.label`
+  ${Container}.material & {
+    position: absolute;
+    pointer-events: none;
+    transform-origin: top left;
+    transition: all 0.2s ease-in-out;
+    top: 10px;
+  }
+  ${Container}.material.filled & {
+    transform: scale(0.75);
+    top: 0;
+  }
+  ${Container}.material.error & {
+    color: ${colors.material.red};
+  }
+`
+
+const StyledInput = styled.input`
+  ${Container}.material & {
+    border: 0;
+    border-bottom: 1px solid ${colors.material.grey};
+    font-size: 14px;
+    outline: none;
+    position: absolute;
+    transition: all 0.2s ease-in-out;
+    top: 15px;
+    width: 100%;
+    &::placeholder {
+      color: rgba(255, 255, 255, 0);
       transition: all 0.2s ease-in-out;
-      &:hover,
-      &:focus {
-        border-bottom: 2px solid ${colors.black};
+    }
+    &:focus {
+      + label {
+        transform: scale(0.75);
+        top: 0;
       }
-      &:-webkit-autofill {
-        transition-delay: 99999s;
-        -webkit-transition-delay: 99999s;
+      &::placeholder {
+        color: inherit;
       }
     }
-    &.error {
-      input {
-        border-bottom: 2px solid ${colors.red};
-      }
-      label {
-        color: ${colors.red};
-      }
-      span {
-        color: ${colors.red};
-      }
+    &:hover {
+      border-bottom: 2px solid ${colors.material.black};
     }
+    &:-webkit-autofill {
+      transition-delay: 99999s;
+      -webkit-transition-delay: 99999s;
+    }
+  }
+  ${Container}.material.error & {
+    border-bottom: 2px solid ${colors.material.red};
+  }
+`
+
+const Error = styled.span`
+  ${Container}.material & {
+    bottom: 0;
+    font-size: 12px;
+    position: absolute;
+  }
+  ${Container}.material.error & {
+    color: ${colors.material.red};
   }
 `
 

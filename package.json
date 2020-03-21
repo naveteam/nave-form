@@ -1,6 +1,6 @@
 {
   "name": "nave-form",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "",
   "author": "Nave.rs",
   "license": "MIT",
@@ -84,5 +84,8 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "dependencies": {
+    "react-helmet": "^5.2.1"
   }
 }
