@@ -29,6 +29,24 @@ const masks = {
         return numbers.replace(/(\d{3})(\d{3})(\d{3})(\d{2})(.+?)/g, '$1.$2.$3-$4')
     }
   },
+  cnpj: value => {
+    const numbers = value.replace(/\D/g, '')
+
+    switch (true) {
+      case numbers.length <= 2:
+        return numbers.replace(/(\d{2})/g, '$1')
+      case numbers.length <= 5:
+        return numbers.replace(/(\d{2})(\d{1,3})/g, '$1.$2')
+      case numbers.length <= 8:
+        return numbers.replace(/(\d{2})(\d{3})(\d{1,3})/g, '$1.$2.$3')
+      case numbers.length <= 12:
+        return numbers.replace(/(\d{2})(\d{3})(\d{3})(\d{1,4})/g, '$1.$2.$3/$4')
+      case numbers.length <= 14:
+        return numbers.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{1,2})/g, '$1.$2.$3/$4-$5')
+      default:
+        return numbers.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})(.+?)/g, '$1.$2.$3/$4-$5')
+    }
+  },
   currency: value => {
     const numbers = value.replace(/\D/g, '')
 
@@ -65,6 +83,9 @@ const remove = {
       .join('-')
   },
   cpf: value => {
+    return value.replace(/\D/g, '')
+  },
+  cnpj: value => {
     return value.replace(/\D/g, '')
   },
   currency: value => {

@@ -15,6 +15,14 @@ const App = () => {
         variant='material'
       />
       <Input
+        name='cnpj'
+        pattern='cnpj'
+        required='Campo obrigatório'
+        placeholder='00.000.000/0000-00'
+        label='CNPJ'
+        variant='material'
+      />
+      <Input
         name='bornDate'
         mask='date'
         validate='date'
