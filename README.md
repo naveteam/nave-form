@@ -25,7 +25,14 @@ const App = () => {
 
   return (
     <Form onSubmit={onSubmit} unmask>
-      <Input name='cpf' pattern='cpf' required='Campo obrigatório' placeholder='000.000.000-00' label='CPF' />
+      <Input
+        name='cpf'
+        pattern='cpf'
+        required='Campo obrigatório'
+        placeholder='000.000.000-00'
+        label='CPF'
+        variant='material'
+      />
       <Input
         name='bornDate'
         mask='date'
@@ -33,8 +40,16 @@ const App = () => {
         required='Campo obrigatório'
         placeholder='00/00/0000'
         label='Data de Nascimento'
+        variant='material'
       />
-      <Input name='zipCode' pattern='zipCode' required='Campo obrigatório' placeholder='00000-000' label='CEP' />
+      <Input
+        name='zipCode'
+        pattern='zipCode'
+        required='Campo obrigatório'
+        placeholder='00000-000'
+        label='CEP'
+        variant='material'
+      />
       <If conditions={[{ cpf: '042.104.390-37' }]}>
         <Input
           name='amount'
@@ -42,12 +57,26 @@ const App = () => {
           required='Campo obrigatório'
           placeholder='R$ 0.000,00'
           label='Patrimônio'
+          variant='material'
         />
       </If>
       <ArrayOf name='pets'>
-        <Input name='name' required='Campo obrigatório' placeholder='Tobias Bittencourt' label='Nome do Pet' />
-        <Input name='specie' required='Campo obrigatório' placeholder='Cachorro' label='Espécie' />
-        <Input name='cpf' pattern='cpf' required='Campo obrigatório' placeholder='000.000.000-00' label='CPF' />
+        <Input
+          name='name'
+          required='Campo obrigatório'
+          placeholder='Tobias Bittencourt'
+          label='Nome do Pet'
+          variant='material'
+        />
+        <Input name='specie' required='Campo obrigatório' placeholder='Cachorro' label='Espécie' variant='material' />
+        <Input
+          name='cpf'
+          pattern='cpf'
+          required='Campo obrigatório'
+          placeholder='000.000.000-00'
+          label='CPF'
+          variant='material'
+        />
       </ArrayOf>
 
       <button type='submit'>submit</button>
@@ -56,6 +85,7 @@ const App = () => {
 }
 
 export default App
+
 ```
 
 This includes validations and masks (can be used separately with props `mask` and `validate` or together with `pattern` prop)
@@ -70,6 +100,7 @@ This includes validations and masks (can be used separately with props `mask` an
 - Unmask fields passing a prop `unmask` on Form
 - Conditionally render fields using the `If` component
 - Render arrays of fields using the `ArrayOf` component
+- Render component material-like using the `variant` prop on `Input`
 
 ## License
 
