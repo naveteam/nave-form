@@ -34,6 +34,14 @@ const App = () => {
         variant='material'
       />
       <Input
+        name='cnpj'
+        pattern='cnpj'
+        required='Campo obrigatório'
+        placeholder='00.000.000/0000-00'
+        label='CNPJ'
+        variant='material'
+      />
+      <Input
         name='bornDate'
         mask='date'
         validate='date'
@@ -85,7 +93,6 @@ const App = () => {
 }
 
 export default App
-
 ```
 
 This includes validations and masks (can be used separately with props `mask` and `validate` or together with `pattern` prop)
@@ -94,6 +101,7 @@ This includes validations and masks (can be used separately with props `mask` an
 - Date
 - Currency
 - CPF
+- CNPJ
 - Zip Code
 
 ## Other avaliable functions
