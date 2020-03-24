@@ -50,15 +50,7 @@ const Input = ({ name, required, validate, mask, pattern, label, placeholder, cl
   return useMemo(
     () => (
       <Container className={mountClassName()}>
-        {console.log(error)}
-        <StyledInput
-          name={name}
-          ref={ref}
-          onChange={onChange}
-          onBlur={onBlur}
-          style={{ display: 'block' }}
-          placeholder={placeholder}
-        />
+        <StyledInput name={name} ref={ref} onChange={onChange} onBlur={onBlur} placeholder={placeholder} />
         {label && <Label>{label}</Label>}
         {touched && error && <Error>{error}</Error>}
       </Container>
@@ -95,6 +87,7 @@ const Label = styled.label`
 
 const StyledInput = styled.input`
   ${Container}.material & {
+    display: block;
     border: 0;
     border-bottom: 1px solid ${colors.material.grey};
     font-size: 14px;
@@ -113,7 +106,7 @@ const StyledInput = styled.input`
         top: 0;
       }
       &::placeholder {
-        color: inherit;
+        color: rgba(0, 0, 0, 0.3);
       }
     }
     &:hover {

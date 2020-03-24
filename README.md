@@ -6,7 +6,10 @@
 
 <p align="center">Form creation made easy by <a href="https://nave.rs" target="_blank">Nave.rs</a>. This package is an abstraction of <a href="https://react-hook-form.com" target="_blank">react-hook-form</a>.</p>
 
-[![NPM](https://img.shields.io/npm/v/nave-form.svg)](https://www.npmjs.com/package/nave-form) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![NPM](https://img.shields.io/npm/v/nave-form.svg)](https://www.npmjs.com/package/nave-form)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
 ## Installation
 
