@@ -39,12 +39,12 @@ const Input = ({ name, required, validate, mask, pattern, label, placeholder, cl
       setError(values.get(errors, name)?.message)
       e.target.value ? setFilled(true) : setFilled(false)
     },
-    [mask, setValue, name, pattern],
+    [mask, setValue, name, pattern]
   )
 
   const ref = register({
     ...(required && { required }),
-    ...((pattern || validate) && { validate: validations[pattern || validate] }),
+    ...((pattern || validate) && { validate: validations[pattern || validate] })
   })
 
   return useMemo(
@@ -55,7 +55,7 @@ const Input = ({ name, required, validate, mask, pattern, label, placeholder, cl
         {touched && error && <Error>{error}</Error>}
       </Container>
     ),
-    [name, onChange, placeholder, register, required, validate, touched, pattern, label, error, mountClassName],
+    [name, onChange, placeholder, register, required, validate, touched, pattern, label, error, mountClassName]
   )
 }
 

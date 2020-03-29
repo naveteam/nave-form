@@ -18,10 +18,10 @@ const ArrayOf = ({ name, addText = '+', removeText = '-', children, className })
                     ...{
                       ...child.props,
                       key: `${item.id}-${child.props.name}`,
-                      name: `${name}.${index}.${child.props.name}`,
-                    },
+                      name: `${name}.${index}.${child.props.name}`
+                    }
                   })
-                : child,
+                : child
             )}
             <button onClick={() => remove(index)}>{removeText}</button>
           </fieldset>
