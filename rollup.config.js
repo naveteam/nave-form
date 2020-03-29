@@ -15,21 +15,21 @@ export default {
     {
       file: pkg.main,
       format: 'cjs',
-      sourcemap: true,
+      sourcemap: true
     },
     {
       file: pkg.module,
       format: 'es',
-      sourcemap: true,
-    },
+      sourcemap: true
+    }
   ],
   plugins: [
     eslint({
-      fix: true,
+      fix: true
     }),
     external(),
     postcss({
-      modules: true,
+      modules: true
     }),
     url(),
     svgr(),
@@ -39,9 +39,9 @@ export default {
       namedExports: {
         'node_modules/react/index.js': ['cloneElement', 'createContext', 'Component', 'createElement'],
         'node_modules/react-dom/index.js': ['render', 'hydrate'],
-        'node_modules/react-is/index.js': ['isElement', 'isValidElementType', 'ForwardRef'],
-      },
+        'node_modules/react-is/index.js': ['isElement', 'isValidElementType', 'ForwardRef']
+      }
     }),
-    babel(),
-  ],
+    babel()
+  ]
 }

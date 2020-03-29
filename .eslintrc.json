@@ -22,7 +22,7 @@
     ],
     "comma-dangle": [
       2,
-      "only-multiline"
+      "never"
     ],
     "no-trailing-spaces": [
       2
@@ -37,8 +37,5 @@
     "react-hooks/rules-of-hooks": "error",
     "prettier/prettier": 2,
     "space-before-function-paren": 0
-  },
-  "parserOptions": {
-    "sourceType": "module"
   }
 }

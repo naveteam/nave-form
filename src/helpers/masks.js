@@ -72,7 +72,7 @@ const masks = {
       default:
         return numbers.replace(/(\d{5})(\d{1,3})(.+?)/, '$1-$2')
     }
-  },
+  }
 }
 
 const remove = {
@@ -93,7 +93,7 @@ const remove = {
   },
   zipCode: value => {
     return value.replace(/\D/g, '')
-  },
+  }
 }
 
 export default { ...masks, remove }

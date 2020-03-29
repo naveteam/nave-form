@@ -7,9 +7,9 @@ const If = ({ children, conditions }) => {
   const validateAppear = useCallback(
     () =>
       conditions.map(condition =>
-        Object.entries(condition).reduce((acc, [key, value]) => acc && watch(key) === value, true),
+        Object.entries(condition).reduce((acc, [key, value]) => acc && watch(key) === value, true)
       ),
-    [conditions, watch],
+    [conditions, watch]
   )
 
   const shouldAppear = validateAppear()
