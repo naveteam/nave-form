@@ -11,7 +11,7 @@ const values = {
       }
       return values.set(source[dive], rest, value)
     }
-  },
+  }
 }
 
 export default values

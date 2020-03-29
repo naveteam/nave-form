@@ -78,7 +78,7 @@ const validations = {
   },
   zipCode: value => {
     return new RegExp(/^[0-9]{5}-[0-9]{3}$/).test(value)
-  },
+  }
 }
 
 export default validations

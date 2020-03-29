@@ -26,10 +26,10 @@ const Form = ({ defaultValues, children, onSubmit, unmask }) => {
               : {
                   ...acc,
                   ...((child.props.pattern || child.props.mask) && {
-                    [`${parent ? `${parent}.` : ''}${child.props.name}`]: child.props.pattern || child.props.mask,
-                  }),
+                    [`${parent ? `${parent}.` : ''}${child.props.name}`]: child.props.pattern || child.props.mask
+                  })
                 },
-          {},
+          {}
         )
 
       const unmasks = testMasks(children)
@@ -41,15 +41,15 @@ const Form = ({ defaultValues, children, onSubmit, unmask }) => {
                 Array.isArray(value)
                   ? {
                       ...acc,
-                      [key]: [...value.map(single => unmasked(single, key))],
+                      [key]: [...value.map(single => unmasked(single, key))]
                     }
                   : {
                       ...acc,
                       [key]: masks.remove[unmasks[`${parent ? `${parent}.` : ''}${key}`]]
                         ? masks.remove[unmasks[`${parent ? `${parent}.` : ''}${key}`]](value)
-                        : value,
+                        : value
                     },
-              {},
+              {}
             )
           : values
 
@@ -71,8 +71,8 @@ const Form = ({ defaultValues, children, onSubmit, unmask }) => {
                 ? React.createElement(child.type, {
                     ...{
                       ...child.props,
-                      key: child.props.name,
-                    },
+                      key: child.props.name
+                    }
                   })
                 : child
             })
