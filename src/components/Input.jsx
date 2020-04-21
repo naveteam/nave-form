@@ -73,7 +73,7 @@ const Label = styled.label`
     position: absolute;
     pointer-events: none;
     transform-origin: top left;
-    transition: all 0.2s ease-in-out;
+    transition: all 0.3s cubic-bezier(0, 0, 0.2, 1) 0ms;
     top: 10px;
   }
   ${Container}.material.filled & {
@@ -93,12 +93,12 @@ const StyledInput = styled.input`
     font-size: 14px;
     outline: none;
     position: absolute;
-    transition: all 0.2s ease-in-out;
+    transition: all 0.3s cubic-bezier(0, 0, 0.2, 1) 0ms;
     top: 15px;
     width: 100%;
     &::placeholder {
       color: rgba(255, 255, 255, 0);
-      transition: all 0.2s ease-in-out;
+      transition: all 0.3s cubic-bezier(0, 0, 0.2, 1) 0ms;
     }
     &:focus {
       + label {
