@@ -1,8 +1,11 @@
 import React from 'react'
-import { Form, Input, If, ArrayOf } from 'nave-form'
+import { Form, Input, If, ArrayOf, logger } from 'nave-form'
 
 const App = () => {
   const onSubmit = data => console.log(data)
+
+  logger.prod.log('Eduardo', 'Bittencourt')
+  logger.json({ name: 'Eduardo', lastName: 'Bittencourt' })
 
   return (
     <Form onSubmit={onSubmit} unmask>
