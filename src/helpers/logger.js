@@ -39,14 +39,14 @@ const methods = {
 }
 
 const logger = {
-  ...methods,
+  ...Object.entries(methods).reduce((acc, [name, func]) => {
+    return {
+      ...acc,
+      [name]: (...props) => environment === 'production' || func(...props)
+    }
+  }, {}),
   prod: {
-    ...Object.entries(methods).reduce((acc, [name, func]) => {
-      return {
-        ...acc,
-        [name]: (...props) => environment === 'production' || func(...props)
-      }
-    }, {})
+    ...methods
   }
 }
 
