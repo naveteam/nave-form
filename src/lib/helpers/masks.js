@@ -77,10 +77,7 @@ const masks = {
 
 const remove = {
   date: value => {
-    return value
-      .split('/')
-      .reverse()
-      .join('-')
+    return value.split('/').reverse().join('-')
   },
   cpf: value => {
     return value.replace(/\D/g, '')

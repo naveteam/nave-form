@@ -1,14 +1,14 @@
 {
-  "presets": [
-    [
-      "@babel/preset-env",
-      {
-        "modules": false
-      }
+    "presets": [
+        [
+            "@babel/preset-env",
+            {
+                "modules": false
+            }
+        ],
+        "@babel/react"
     ],
-    "@babel/react"
-  ],
-  "plugins": [
-    "@babel/plugin-proposal-optional-chaining"
-  ]
+    "plugins": [
+        "@babel/plugin-proposal-optional-chaining"
+    ]
 }

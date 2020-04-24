@@ -6,6 +6,8 @@ export const loggerColors = {
   },
   actions: {
     log: { background: '#0000ff', font: '#dddddd' },
-    json: { background: '#ffff00', font: '#444444' }
+    json: { background: '#00ff00', font: '#444444' },
+    warn: { background: '#ffff00', font: '#444444' },
+    error: { background: '#ff0000', font: '#eeeeee' }
   }
 }

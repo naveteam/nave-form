@@ -1,7 +1,7 @@
 import React from 'react'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 
-import { forceArray } from '../utils'
+import { forceArray } from '../../utils'
 
 const ArrayOf = ({ name, addText = '+', removeText = '-', children, className }) => {
   const { control } = useFormContext()

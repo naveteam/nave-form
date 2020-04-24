@@ -1,11 +1,15 @@
 import React from 'react'
-import { Form, Input, If, ArrayOf, logger } from 'nave-form'
+
+import { Form, Input, Select, ArrayOf, If, logger } from './lib'
 
 const App = () => {
-  const onSubmit = data => console.log(data)
+  const onSubmit = data => logger.json(data)
 
-  logger.prod.log('Eduardo', 'Bittencourt')
-  logger.json({ name: 'Eduardo', lastName: 'Bittencourt' })
+  const options = [
+    { name: 'Eduardo', value: 1 },
+    { name: 'Pedro', value: 2 },
+    { name: 'Letícia', value: 3 }
+  ]
 
   return (
     <Form onSubmit={onSubmit} unmask>
@@ -17,6 +21,7 @@ const App = () => {
         label='CPF'
         variant='material'
       />
+      <Select options={options} name='people' accessor='name' label='Irmão' required='Campo obrigatório' />
       <Input
         name='cnpj'
         pattern='cnpj'

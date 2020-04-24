@@ -1,36 +1,32 @@
 import React from 'react'
-import { Helmet } from 'react-helmet'
-import { createGlobalStyle } from 'styled-components'
 import { useForm, FormContext } from 'react-hook-form'
 
-import { masks } from '../helpers'
-import { forceArray } from '../utils'
+import { masks } from '../../helpers'
+import { forceArray } from '../../utils'
 
 const Form = ({ defaultValues, children, onSubmit, unmask }) => {
   const methods = useForm({ defaultValues })
   const { handleSubmit } = methods
 
-  const GlobalStyle = createGlobalStyle`
-    .form {
-      font-family: 'Roboto', sans-serif;
-    }
-  `
-
   const prepareSubmit = values => {
     if (unmask) {
-      const testMasks = (children, parent) =>
-        children.reduce(
-          (acc, child) =>
-            ['If', 'ArrayOf'].includes(child.type.name)
-              ? { ...acc, ...testMasks(forceArray(child.props.children), child.props?.name) }
-              : {
-                  ...acc,
-                  ...((child.props.pattern || child.props.mask) && {
-                    [`${parent ? `${parent}.` : ''}${child.props.name}`]: child.props.pattern || child.props.mask
-                  })
-                },
-          {}
-        )
+      const testMasks = (children, parent) => {
+        return children.reduce((acc, child) => {
+          if (['If', 'ArrayOf'].includes(child.type.name)) {
+            return {
+              ...acc,
+              ...testMasks(forceArray(child.props.children), child.props?.name)
+            }
+          }
+          const mountName = parent ? `${parent}.${child.props.name}` : child.props.name
+          return {
+            ...acc,
+            ...((child.props.pattern || child.props.mask) && {
+              [mountName]: child.props.pattern || child.props.mask
+            })
+          }
+        }, {})
+      }
 
       const unmasks = testMasks(children)
 
@@ -61,10 +57,7 @@ const Form = ({ defaultValues, children, onSubmit, unmask }) => {
 
   return (
     <FormContext {...methods}>
-      <Helmet>
-        <link href='https://fonts.googleapis.com/css?family=Roboto&display=swap' rel='stylesheet' />
-      </Helmet>
-      <form onSubmit={handleSubmit(prepareSubmit)} className='form'>
+      <form onSubmit={handleSubmit(prepareSubmit)}>
         {Array.isArray(children)
           ? children.map(child => {
               return child.props.name
@@ -78,7 +71,6 @@ const Form = ({ defaultValues, children, onSubmit, unmask }) => {
             })
           : children}
       </form>
-      <GlobalStyle />
     </FormContext>
   )
 }
