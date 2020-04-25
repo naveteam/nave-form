@@ -1,16 +1,17 @@
 import React from 'react'
 import { TextField } from '@material-ui/core'
+import { styled } from '@material-ui/core/styles'
 import { useFormContext, Controller } from 'react-hook-form'
 
 import { masks, values, validations } from '../../helpers'
 
-const Input = ({ name, required, validate, mask, pattern, label, placeholder, className, defaultValue }) => {
+const Input = ({ name, required, validate, mask, pattern, label, placeholder, className, defaultValue = '' }) => {
   const { errors } = useFormContext()
 
   return (
     <Controller
       fullWidth
-      as={TextField}
+      as={StyledTextField}
       name={name}
       label={label}
       placeholder={placeholder}
@@ -28,5 +29,12 @@ const Input = ({ name, required, validate, mask, pattern, label, placeholder, cl
     />
   )
 }
+
+const StyledTextField = styled(TextField)({
+  '& input:-webkit-autofill': {
+    'transition-delay': '99999s',
+    '-webkit-transition-delay': '99999s'
+  }
+})
 
 export default Input
