@@ -11,7 +11,7 @@ const Form = ({ defaultValues, children, onSubmit, unmask }) => {
   const prepareSubmit = values => {
     if (unmask) {
       const testMasks = (children, parent) => {
-        return children.reduce((acc, child) => {
+        return forceArray(children).reduce((acc, child) => {
           if (['If', 'ArrayOf'].includes(child.type.name)) {
             return {
               ...acc,
