@@ -1,9 +1,14 @@
 import React from 'react'
 
-import { Form, Input, Select, ArrayOf, If, logger } from './lib'
+import { Form, Input, Select, RichText, ArrayOf, If, logger } from './lib'
 
 const App = () => {
-  const onSubmit = data => logger.json(data)
+  const defaultValues = JSON.parse(localStorage.getItem('@nave-form:data'))
+
+  const onSubmit = data => {
+    logger.json(data)
+    localStorage.setItem('@nave-form:data', JSON.stringify(data))
+  }
 
   const options = [
     { name: 'Eduardo', value: 1 },
@@ -12,7 +17,8 @@ const App = () => {
   ]
 
   return (
-    <Form onSubmit={onSubmit} unmask>
+    <Form onSubmit={onSubmit} {...(defaultValues && { defaultValues })} unmask>
+      <RichText name='rich' />
       <Input
         name='cpf'
         pattern='cpf'
