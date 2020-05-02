@@ -18,7 +18,7 @@ const App = () => {
 
   return (
     <Form onSubmit={onSubmit} {...(defaultValues && { defaultValues })} unmask>
-      <RichText name='rich' />
+      <RichText name='rich' placeholder='RichText' />
       <Input
         name='cpf'
         pattern='cpf'

@@ -13,14 +13,18 @@ const Form = ({ defaultValues, children, onSubmit, unmask }) => {
       return item
     }
   }
-  const prepareDefaultValues = values =>
-    Object.entries(values).reduce(
-      (acc, [key, value]) => ({
-        ...acc,
-        [key]: testRichJSON(value)
-      }),
-      {}
-    )
+  const prepareDefaultValues = values => {
+    const entries = values ? Object.entries(values) : []
+    return entries.length
+      ? entries.reduce(
+          (acc, [key, value]) => ({
+            ...acc,
+            [key]: testRichJSON(value)
+          }),
+          {}
+        )
+      : {}
+  }
 
   const methods = useForm({ defaultValues: prepareDefaultValues(defaultValues) })
   const { handleSubmit } = methods
