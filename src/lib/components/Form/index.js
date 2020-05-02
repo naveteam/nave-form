@@ -1,14 +1,48 @@
 import React from 'react'
 import { useForm, FormContext } from 'react-hook-form'
+import { EditorState, convertToRaw, convertFromRaw } from 'draft-js'
 
 import { masks } from '../../helpers'
 import { forceArray } from '../../utils'
 
 const Form = ({ defaultValues, children, onSubmit, unmask }) => {
-  const methods = useForm({ defaultValues })
+  const testRichJSON = item => {
+    try {
+      return EditorState.createWithContent(convertFromRaw(item))
+    } catch {
+      return item
+    }
+  }
+  const prepareDefaultValues = values =>
+    Object.entries(values).reduce(
+      (acc, [key, value]) => ({
+        ...acc,
+        [key]: testRichJSON(value)
+      }),
+      {}
+    )
+
+  const methods = useForm({ defaultValues: prepareDefaultValues(defaultValues) })
   const { handleSubmit } = methods
 
+  const testRich = item => {
+    try {
+      return convertToRaw(item.getCurrentContent())
+    } catch {
+      return item
+    }
+  }
+
   const prepareSubmit = values => {
+    const removeRich = values =>
+      Object.entries(values).reduce(
+        (acc, [key, value]) => ({
+          ...acc,
+          [key]: testRich(value)
+        }),
+        {}
+      )
+
     if (unmask) {
       const testMasks = (children, parent) => {
         return forceArray(children).reduce((acc, child) => {
@@ -49,9 +83,9 @@ const Form = ({ defaultValues, children, onSubmit, unmask }) => {
             )
           : values
 
-      onSubmit(unmasked(values))
+      onSubmit(removeRich(unmasked(values)))
     } else {
-      onSubmit(values)
+      onSubmit(removeRich(values))
     }
   }
 
