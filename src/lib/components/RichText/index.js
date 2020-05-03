@@ -43,12 +43,12 @@ const RichText = ({ name, placeholder }) => {
     setValue(name, newState)
   }
 
-  const ControlButton = ({ icon, style, mode }) => {
+  const ControlButton = ({ icon, scope, mode }) => {
     const onClick = () => {
-      if (style === 'inline') {
+      if (scope === 'inline') {
         styleInline(mode)
       }
-      if (style === 'block') {
+      if (scope === 'block') {
         styleBlock(mode)
       }
     }
@@ -62,15 +62,15 @@ const RichText = ({ name, placeholder }) => {
   return (
     <>
       <ControlsContainer>
-        <ControlButton style='inline' mode='bold' icon={FormatBold} />
-        <ControlButton style='inline' mode='italic' icon={FormatItalic} />
-        <ControlButton style='inline' mode='underline' icon={FormatUnderlined} />
+        <ControlButton scope='inline' mode='bold' icon={FormatBold} />
+        <ControlButton scope='inline' mode='italic' icon={FormatItalic} />
+        <ControlButton scope='inline' mode='underline' icon={FormatUnderlined} />
         <Divider orientation='vertical' flexItem />
-        <ControlButton style='block' mode='header-one' icon={Title} />
-        <ControlButton style='block' mode='blockquote' icon={FormatQuote} />
-        <ControlButton style='block' mode='code-block' icon={Code} />
-        <ControlButton style='block' mode='unordered-list-item' icon={FormatListBulleted} />
-        <ControlButton style='block' mode='ordered-list-item' icon={FormatListNumbered} />
+        <ControlButton scope='block' mode='header-one' icon={Title} />
+        <ControlButton scope='block' mode='blockquote' icon={FormatQuote} />
+        <ControlButton scope='block' mode='code-block' icon={Code} />
+        <ControlButton scope='block' mode='unordered-list-item' icon={FormatListBulleted} />
+        <ControlButton scope='block' mode='ordered-list-item' icon={FormatListNumbered} />
       </ControlsContainer>
       <EditorContainer>
         <Controller
