@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Editor, EditorState, RichUtils } from 'draft-js'
-import { Controller, useFormContext } from 'react-hook-form'
-import { IconButton, Divider } from '@material-ui/core'
+import { Controller, ErrorMessage, useFormContext } from 'react-hook-form'
+import { IconButton, Divider, FormHelperText } from '@material-ui/core'
 import {
   FormatBold,
   FormatItalic,
@@ -14,8 +14,10 @@ import {
   Code
 } from '@material-ui/icons'
 
-const RichText = ({ name, placeholder, required, label }) => {
-  const { setValue, getValues } = useFormContext()
+import { values } from '../../helpers'
+
+const RichText = ({ name, required, label }) => {
+  const { setValue, getValues, errors } = useFormContext()
 
   const handleKeyCommand = (command, editorState) => {
     try {
@@ -70,7 +72,7 @@ const RichText = ({ name, placeholder, required, label }) => {
         <ControlButton scope='block' mode='unordered-list-item' icon={FormatListBulleted} />
         <ControlButton scope='block' mode='ordered-list-item' icon={FormatListNumbered} />
       </ControlsContainer>
-      <EditorContainer>
+      <EditorContainer error={!!values.get(errors, name)?.message}>
         <Controller
           as={Editor}
           name={name}
@@ -79,9 +81,10 @@ const RichText = ({ name, placeholder, required, label }) => {
           defaultValue={EditorState.createEmpty()}
           handleKeyCommand={handleKeyCommand}
           onChange={([value]) => value}
-          required={required}
+          rules={{ validate: value => !value.getCurrentContent().hasText() && required }}
         />
       </EditorContainer>
+      <ErrorMessage as={FormHelperText} error={true} errors={errors} name={name} />
     </>
   )
 }
@@ -99,7 +102,7 @@ const EditorContainer = styled.div`
     font-family: 'Roboto', sans-serif;
   }
   .public-DraftEditorPlaceholder-root {
-    color: rgba(0, 0, 0, 0.54);
+    color: ${({ error }) => (error ? '#f44336' : 'rgba(0, 0, 0, 0.54)')};
     position: absolute;
     pointer-events: none;
     padding: 5px;
@@ -125,6 +128,13 @@ const EditorContainer = styled.div`
         transform: scale(1);
       }
     }
+    ${({ error }) =>
+      error &&
+      `&:after {
+        transform: scale(1);
+        border-bottom-color: #f44336;
+      }
+    `}
     &:before {
       left: 0;
       right: 0;
