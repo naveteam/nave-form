@@ -18,24 +18,10 @@ const App = () => {
 
   return (
     <Form onSubmit={onSubmit} {...(defaultValues && { defaultValues })} unmask>
-      <RichText name='rich' placeholder='RichText' />
-      <Input
-        name='cpf'
-        pattern='cpf'
-        required='Campo obrigatório'
-        placeholder='000.000.000-00'
-        label='CPF'
-        variant='material'
-      />
+      <RichText name='description' placeholder='Digite aqui...' required='Campo obrigatório' label='Descrição' />
+      <Input name='cpf' pattern='cpf' required='Campo obrigatório' placeholder='000.000.000-00' label='CPF' />
       <Select options={options} name='people' accessor='name' label='Irmão' required='Campo obrigatório' />
-      <Input
-        name='cnpj'
-        pattern='cnpj'
-        required='Campo obrigatório'
-        placeholder='00.000.000/0000-00'
-        label='CNPJ'
-        variant='material'
-      />
+      <Input name='cnpj' pattern='cnpj' required='Campo obrigatório' placeholder='00.000.000/0000-00' label='CNPJ' />
       <Input
         name='bornDate'
         mask='date'
@@ -43,16 +29,8 @@ const App = () => {
         required='Campo obrigatório'
         placeholder='00/00/0000'
         label='Data de Nascimento'
-        variant='material'
       />
-      <Input
-        name='zipCode'
-        pattern='zipCode'
-        required='Campo obrigatório'
-        placeholder='00000-000'
-        label='CEP'
-        variant='material'
-      />
+      <Input name='zipCode' pattern='zipCode' required='Campo obrigatório' placeholder='00000-000' label='CEP' />
       <If conditions={[{ cpf: '042.104.390-37' }]}>
         <Input
           name='amount'
@@ -60,26 +38,12 @@ const App = () => {
           required='Campo obrigatório'
           placeholder='R$ 0.000,00'
           label='Patrimônio'
-          variant='material'
         />
       </If>
       <ArrayOf name='pets'>
-        <Input
-          name='name'
-          required='Campo obrigatório'
-          placeholder='Tobias Bittencourt'
-          label='Nome do Pet'
-          variant='material'
-        />
-        <Input name='specie' required='Campo obrigatório' placeholder='Cachorro' label='Espécie' variant='material' />
-        <Input
-          name='cpf'
-          pattern='cpf'
-          required='Campo obrigatório'
-          placeholder='000.000.000-00'
-          label='CPF'
-          variant='material'
-        />
+        <Input name='name' required='Campo obrigatório' placeholder='Tobias Bittencourt' label='Nome do Pet' />
+        <Input name='specie' required='Campo obrigatório' placeholder='Cachorro' label='Espécie' />
+        <Input name='cpf' pattern='cpf' required='Campo obrigatório' placeholder='000.000.000-00' label='CPF' />
       </ArrayOf>
 
       <button type='submit'>submit</button>

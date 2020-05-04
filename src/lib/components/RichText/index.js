@@ -14,7 +14,7 @@ import {
   Code
 } from '@material-ui/icons'
 
-const RichText = ({ name, placeholder }) => {
+const RichText = ({ name, placeholder, required, label }) => {
   const { setValue, getValues } = useFormContext()
 
   const handleKeyCommand = (command, editorState) => {
@@ -77,10 +77,11 @@ const RichText = ({ name, placeholder }) => {
           as={Editor}
           name={name}
           valueName='editorState'
-          placeholder={placeholder}
+          placeholder={label}
           defaultValue={EditorState.createEmpty()}
           handleKeyCommand={handleKeyCommand}
           onChange={([value]) => value}
+          required={required}
         />
       </EditorContainer>
     </>
@@ -107,10 +108,40 @@ const EditorContainer = styled.div`
   }
   .DraftEditor-editorContainer {
     padding: 5px;
-    border-bottom: 1px solid black;
   }
   .public-DraftEditor-content {
     min-height: 100px;
+    &:after {
+      left: 0;
+      right: 0;
+      bottom: 0;
+      content: '';
+      position: absolute;
+      transform: scaleX(0);
+      transition: transform 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+      border-bottom: 2px solid #3f51b5;
+      pointer-events: none;
+    }
+    &:focus {
+      &:after {
+        transform: scale(1);
+      }
+    }
+    &:before {
+      left: 0;
+      right: 0;
+      bottom: 0;
+      content: '';
+      position: absolute;
+      transition: border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.42);
+      pointer-events: none;
+    }
+    &:hover {
+      &:before {
+        border-bottom: 2px solid rgba(0, 0, 0, 0.87);
+      }
+    }
   }
 `
 
