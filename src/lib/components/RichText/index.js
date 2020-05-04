@@ -30,10 +30,7 @@ const RichText = ({ name, placeholder, required, label }) => {
 
   const styleInline = mode => {
     const state = getValues()[name]
-    const newState = EditorState.forceSelection(
-      RichUtils.toggleInlineStyle(state, mode.toUpperCase()),
-      state.getSelection()
-    )
+    const newState = RichUtils.toggleInlineStyle(state, mode.toUpperCase())
     setValue(name, newState)
   }
 
@@ -44,7 +41,8 @@ const RichText = ({ name, placeholder, required, label }) => {
   }
 
   const ControlButton = ({ icon, scope, mode }) => {
-    const onClick = () => {
+    const onClick = e => {
+      e.preventDefault()
       if (scope === 'inline') {
         styleInline(mode)
       }
@@ -53,7 +51,7 @@ const RichText = ({ name, placeholder, required, label }) => {
       }
     }
     return (
-      <IconButton size='small' onClick={onClick} component='span'>
+      <IconButton size='small' onMouseDown={onClick} component='span'>
         {React.createElement(icon)}
       </IconButton>
     )
