@@ -17,7 +17,7 @@ import {
 import { values } from '../../helpers'
 
 const RichText = ({ name, required, label }) => {
-  const { setValue, getValues, errors } = useFormContext()
+  const { setValue, getValues, errors, watch } = useFormContext()
 
   const handleKeyCommand = (command, editorState) => {
     try {
@@ -59,6 +59,15 @@ const RichText = ({ name, required, label }) => {
     )
   }
 
+  watch(name)
+  const verify = () => {
+    if (!getValues()[name]) {
+      return false
+    }
+    return getValues()[name].getCurrentInlineStyle()
+  }
+
+  console.log(verify())
   return (
     <>
       <ControlsContainer>
