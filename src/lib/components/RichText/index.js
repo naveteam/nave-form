@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { Editor, EditorState, RichUtils } from 'draft-js'
 import { Controller, ErrorMessage, useFormContext } from 'react-hook-form'
-import { IconButton, Divider, FormHelperText } from '@material-ui/core'
+import { IconButton as MaterialIconButton, Divider, FormHelperText } from '@material-ui/core'
 import {
   FormatBold,
   FormatItalic,
@@ -18,6 +18,7 @@ import { values } from '../../helpers'
 
 const RichText = ({ name, required, label }) => {
   const { setValue, getValues, errors, watch } = useFormContext()
+  const [localEditorState, setLocalEditorState] = useState(getValues()[name])
 
   const handleKeyCommand = (command, editorState) => {
     try {
@@ -53,21 +54,17 @@ const RichText = ({ name, required, label }) => {
       }
     }
     return (
-      <IconButton size='small' onMouseDown={onClick} component='span'>
+      <IconButton
+        {...(localEditorState?.getCurrentInlineStyle().has(mode.toUpperCase()) && { isActive: true })}
+        size='small'
+        onMouseDown={onClick}
+        component='span'
+      >
         {React.createElement(icon)}
       </IconButton>
     )
   }
 
-  watch(name)
-  const verify = () => {
-    if (!getValues()[name]) {
-      return false
-    }
-    return getValues()[name].getCurrentInlineStyle()
-  }
-
-  console.log(verify())
   return (
     <>
       <ControlsContainer>
@@ -89,7 +86,10 @@ const RichText = ({ name, required, label }) => {
           placeholder={label}
           defaultValue={EditorState.createEmpty()}
           handleKeyCommand={handleKeyCommand}
-          onChange={([value]) => value}
+          onChange={([value]) => {
+            setLocalEditorState(value)
+            return value
+          }}
           rules={{ validate: value => !value.getCurrentContent().hasText() && required }}
         />
       </EditorContainer>
@@ -160,6 +160,10 @@ const EditorContainer = styled.div`
       }
     }
   }
+`
+
+const IconButton = styled(MaterialIconButton)`
+  ${({ isActive }) => isActive && 'background-color: blue !important;'}
 `
 
 export default RichText
