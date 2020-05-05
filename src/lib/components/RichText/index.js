@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Editor, EditorState, RichUtils } from 'draft-js'
 import { Controller, ErrorMessage, useFormContext } from 'react-hook-form'
@@ -17,14 +17,15 @@ import {
 import { values } from '../../helpers'
 
 const RichText = ({ name, required, label }) => {
-  const { setValue, getValues, errors, watch } = useFormContext()
+  const { setValue, getValues, errors } = useFormContext()
   const [currentInlineStyles, setCurrentInlineStyles] = useState([])
-  const [currentBlockStyle, setCurrentBlockStyle] = useState([])
 
   const handleKeyCommand = (command, editorState) => {
     try {
       if (['bold', 'italic', 'underline'].includes(command)) {
-        setValue(name, RichUtils.handleKeyCommand(editorState, command))
+        const newValue = RichUtils.handleKeyCommand(editorState, command)
+        setCurrentInlineStyles(newValue?.getCurrentInlineStyle().toJS())
+        setValue(name, newValue)
         return 'handled'
       }
     } catch {
@@ -61,7 +62,7 @@ const RichText = ({ name, required, label }) => {
     }
     return (
       <IconButton
-        {...(currentInlineStyles.find(e => e === mode.toUpperCase()) && { isactive: true })}
+        {...(currentInlineStyles.find(e => e === mode.toUpperCase()) && { selected: true })}
         size='small'
         onMouseDown={onClick}
         component='span'
@@ -129,6 +130,18 @@ const EditorContainer = styled.div`
   }
   .public-DraftEditor-content {
     min-height: 100px;
+
+    blockquote {
+      padding: 0 40px;
+      border-left: 5px solid #eee;
+      margin: 0;
+    }
+
+    .public-DraftStyleDefault-pre {
+      background-color: #eee;
+      padding: 7px 20px;
+    }
+
     &:after {
       left: 0;
       right: 0;
@@ -171,7 +184,12 @@ const EditorContainer = styled.div`
 `
 
 const IconButton = styled(MaterialIconButton)`
-  ${({ isactive }) => isactive && 'background-color: blue !important;'}
+  ${({ selected }) =>
+    selected &&
+    `background-color: rgba(63, 81, 181, .2) !important;
+      svg {
+        fill: #3f51b5 !important;
+      }`}
 `
 
 export default RichText
