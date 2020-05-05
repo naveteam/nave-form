@@ -18,7 +18,8 @@ import { values } from '../../helpers'
 
 const RichText = ({ name, required, label }) => {
   const { setValue, getValues, errors, watch } = useFormContext()
-  const [localEditorState, setLocalEditorState] = useState(getValues()[name])
+  const [currentInlineStyles, setCurrentInlineStyles] = useState([])
+  const [currentBlockStyle, setCurrentBlockStyle] = useState([])
 
   const handleKeyCommand = (command, editorState) => {
     try {
@@ -35,6 +36,11 @@ const RichText = ({ name, required, label }) => {
     const state = getValues()[name]
     const newState = RichUtils.toggleInlineStyle(state, mode.toUpperCase())
     setValue(name, newState)
+    if (currentInlineStyles.includes(e => e === mode.toUpperCase())) {
+      setCurrentInlineStyles(currentInlineStyles.filter(e => e !== mode.toUpperCase()))
+      return
+    }
+    setCurrentInlineStyles([...currentInlineStyles, mode.toUpperCase()])
   }
 
   const styleBlock = mode => {
@@ -55,7 +61,7 @@ const RichText = ({ name, required, label }) => {
     }
     return (
       <IconButton
-        {...(localEditorState?.getCurrentInlineStyle().has(mode.toUpperCase()) && { isActive: true })}
+        {...(currentInlineStyles.find(e => e === mode.toUpperCase()) && { isactive: true })}
         size='small'
         onMouseDown={onClick}
         component='span'
@@ -87,7 +93,9 @@ const RichText = ({ name, required, label }) => {
           defaultValue={EditorState.createEmpty()}
           handleKeyCommand={handleKeyCommand}
           onChange={([value]) => {
-            setLocalEditorState(value)
+            if (value) {
+              setCurrentInlineStyles(value?.getCurrentInlineStyle().toJS())
+            }
             return value
           }}
           rules={{ validate: value => !value.getCurrentContent().hasText() && required }}
@@ -163,7 +171,7 @@ const EditorContainer = styled.div`
 `
 
 const IconButton = styled(MaterialIconButton)`
-  ${({ isActive }) => isActive && 'background-color: blue !important;'}
+  ${({ isactive }) => isactive && 'background-color: blue !important;'}
 `
 
 export default RichText
