@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useForm, FormContext } from 'react-hook-form'
 import { EditorState, convertToRaw, convertFromRaw } from 'draft-js'
 
@@ -8,42 +8,54 @@ import { forceArray } from '../../utils'
 const Form = ({ defaultValues, children, onSubmit, unmask }) => {
   const leafs = ['Input', 'Select']
 
-  const getFormSchema = ({ children, conditions, parent }) =>
-    children.reduce((acc, child) => {
-      const name = parent ? `${parent}.${child.props.name}` : child.props.name
-      const component = child.type.name
+  const getFormSchema = useCallback(
+    ({ children, conditions, parent }) =>
+      children.reduce((acc, child) => {
+        if (typeof child === 'object') {
+          const name = parent ? `${parent}.${child.props.name}` : child.props.name
+          const component = child.type.name
 
-      if (leafs.includes(component)) {
-        return {
-          ...acc,
-          [name]: {
-            component,
-            ...(conditions && { conditions }),
-            ...(child.props.pattern && { pattern: child.props.pattern }),
-            ...(child.props.mask && { mask: child.props.mask }),
-            ...(child.props.validate && { validate: child.props.validate }),
-            ...(child.props.required && { required: child.props.required })
+          if (leafs.includes(component)) {
+            return {
+              ...acc,
+              [name]: {
+                component,
+                ...(conditions && { conditions }),
+                ...(child.props.pattern && { pattern: child.props.pattern }),
+                ...(child.props.mask && { mask: child.props.mask }),
+                ...(child.props.validate && { validate: child.props.validate }),
+                ...(child.props.required && { required: child.props.required })
+              }
+            }
+          }
+
+          if (component === 'ArrayOf') {
+            const children = forceArray(child.props.children)
+            return { ...acc, ...getFormSchema({ children, parent: child.props.name }) }
+          }
+
+          if (component === 'If') {
+            const children = forceArray(child.props.children)
+            return { ...acc, ...getFormSchema({ children, conditions: child.props.conditions }) }
+          }
+
+          if (child.props.children) {
+            const children = forceArray(child.props.children)
+            return { ...acc, ...getFormSchema({ children, conditions, parent }) }
           }
         }
-      }
 
-      if (component === 'ArrayOf') {
-        const children = forceArray(child.props.children)
-        return { ...acc, ...getFormSchema({ children, parent: child.props.name }) }
-      }
-
-      if (component === 'If') {
-        const children = forceArray(child.props.children)
-        return { ...acc, ...getFormSchema({ children, conditions: child.props.conditions }) }
-      }
-
-      return acc
-    }, {})
+        return acc
+      }, {}),
+    [leafs]
+  )
 
   useEffect(() => {
-    const result = getFormSchema({ children })
-    console.log(result)
-  }, [])
+    if (children) {
+      const result = getFormSchema({ children: forceArray(children) })
+      console.log(result)
+    }
+  }, [children, getFormSchema])
 
   const testRichJSON = item => {
     try {
