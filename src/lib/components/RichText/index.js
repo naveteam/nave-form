@@ -19,6 +19,7 @@ import { values } from '../../helpers'
 const RichText = ({ name, required, label }) => {
   const { setValue, getValues, errors } = useFormContext()
   const [currentInlineStyles, setCurrentInlineStyles] = useState([])
+  const [currentBlockStyle, setCurrentBlockStyle] = useState(null)
 
   const handleKeyCommand = (command, editorState) => {
     try {
@@ -48,6 +49,11 @@ const RichText = ({ name, required, label }) => {
     const state = getValues()[name]
     const newState = EditorState.forceSelection(RichUtils.toggleBlockType(state, mode), state.getSelection())
     setValue(name, newState)
+    if (currentBlockStyle === mode.toUpperCase()) {
+      setCurrentBlockStyle(null)
+      return
+    }
+    setCurrentBlockStyle(mode.toUpperCase())
   }
 
   const ControlButton = ({ icon, scope, mode }) => {
@@ -60,9 +66,10 @@ const RichText = ({ name, required, label }) => {
         styleBlock(mode)
       }
     }
+
     return (
       <IconButton
-        {...(currentInlineStyles.find(e => e === mode.toUpperCase()) && { selected: true })}
+        {...([...currentInlineStyles, currentBlockStyle].find(e => e === mode.toUpperCase()) && { selected: true })}
         size='small'
         onMouseDown={onClick}
         component='span'
@@ -140,6 +147,7 @@ const EditorContainer = styled.div`
     .public-DraftStyleDefault-pre {
       background-color: #eee;
       padding: 7px 20px;
+      overflow-x: auto;
     }
 
     &:after {
