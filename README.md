@@ -111,4 +111,4 @@ This includes validations and masks (can be used separately with props `mask` an
 
 ## License
 
-MIT © [Eduardobittencourt08](https://github.com/Eduardobittencourt08)
+MIT © [eduardobittencourt](https://github.com/eduardobittencourt)
