@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Editor, EditorState, RichUtils } from 'draft-js'
-import { Controller, useFormContext } from 'react-hook-form'
-import { IconButton, Divider } from '@material-ui/core'
+import { Controller, ErrorMessage, useFormContext } from 'react-hook-form'
+import { IconButton as MaterialIconButton, Divider, FormHelperText } from '@material-ui/core'
 import {
   FormatBold,
   FormatItalic,
@@ -14,13 +14,19 @@ import {
   Code
 } from '@material-ui/icons'
 
-const RichText = ({ name, placeholder, required, label }) => {
-  const { setValue, getValues } = useFormContext()
+import { values } from '../../helpers'
+
+const RichText = ({ name, required, label }) => {
+  const { setValue, getValues, errors } = useFormContext()
+  const [currentInlineStyles, setCurrentInlineStyles] = useState([])
+  const [currentBlockStyle, setCurrentBlockStyle] = useState(null)
 
   const handleKeyCommand = (command, editorState) => {
     try {
       if (['bold', 'italic', 'underline'].includes(command)) {
-        setValue(name, RichUtils.handleKeyCommand(editorState, command))
+        const newValue = RichUtils.handleKeyCommand(editorState, command)
+        setCurrentInlineStyles(newValue?.getCurrentInlineStyle().toJS())
+        setValue(name, newValue)
         return 'handled'
       }
     } catch {
@@ -32,12 +38,22 @@ const RichText = ({ name, placeholder, required, label }) => {
     const state = getValues()[name]
     const newState = RichUtils.toggleInlineStyle(state, mode.toUpperCase())
     setValue(name, newState)
+    if (currentInlineStyles.includes(e => e === mode.toUpperCase())) {
+      setCurrentInlineStyles(currentInlineStyles.filter(e => e !== mode.toUpperCase()))
+      return
+    }
+    setCurrentInlineStyles([...currentInlineStyles, mode.toUpperCase()])
   }
 
   const styleBlock = mode => {
     const state = getValues()[name]
     const newState = EditorState.forceSelection(RichUtils.toggleBlockType(state, mode), state.getSelection())
     setValue(name, newState)
+    if (currentBlockStyle === mode.toUpperCase()) {
+      setCurrentBlockStyle(null)
+      return
+    }
+    setCurrentBlockStyle(mode.toUpperCase())
   }
 
   const ControlButton = ({ icon, scope, mode }) => {
@@ -50,8 +66,14 @@ const RichText = ({ name, placeholder, required, label }) => {
         styleBlock(mode)
       }
     }
+
     return (
-      <IconButton size='small' onMouseDown={onClick} component='span'>
+      <IconButton
+        {...([...currentInlineStyles, currentBlockStyle].find(e => e === mode.toUpperCase()) && { selected: true })}
+        size='small'
+        onMouseDown={onClick}
+        component='span'
+      >
         {React.createElement(icon)}
       </IconButton>
     )
@@ -70,7 +92,7 @@ const RichText = ({ name, placeholder, required, label }) => {
         <ControlButton scope='block' mode='unordered-list-item' icon={FormatListBulleted} />
         <ControlButton scope='block' mode='ordered-list-item' icon={FormatListNumbered} />
       </ControlsContainer>
-      <EditorContainer>
+      <EditorContainer error={!!values.get(errors, name)?.message}>
         <Controller
           as={Editor}
           name={name}
@@ -78,10 +100,16 @@ const RichText = ({ name, placeholder, required, label }) => {
           placeholder={label}
           defaultValue={EditorState.createEmpty()}
           handleKeyCommand={handleKeyCommand}
-          onChange={([value]) => value}
-          required={required}
+          onChange={([value]) => {
+            if (value) {
+              setCurrentInlineStyles(value?.getCurrentInlineStyle().toJS())
+            }
+            return value
+          }}
+          rules={{ validate: value => !value.getCurrentContent().hasText() && required }}
         />
       </EditorContainer>
+      <ErrorMessage as={FormHelperText} error={true} errors={errors} name={name} />
     </>
   )
 }
@@ -99,7 +127,7 @@ const EditorContainer = styled.div`
     font-family: 'Roboto', sans-serif;
   }
   .public-DraftEditorPlaceholder-root {
-    color: rgba(0, 0, 0, 0.54);
+    color: ${({ error }) => (error ? '#f44336' : 'rgba(0, 0, 0, 0.54)')};
     position: absolute;
     pointer-events: none;
     padding: 5px;
@@ -109,6 +137,19 @@ const EditorContainer = styled.div`
   }
   .public-DraftEditor-content {
     min-height: 100px;
+
+    blockquote {
+      padding: 0 40px;
+      border-left: 5px solid #eee;
+      margin: 0;
+    }
+
+    .public-DraftStyleDefault-pre {
+      background-color: #eee;
+      padding: 7px 20px;
+      overflow-x: auto;
+    }
+
     &:after {
       left: 0;
       right: 0;
@@ -125,6 +166,13 @@ const EditorContainer = styled.div`
         transform: scale(1);
       }
     }
+    ${({ error }) =>
+      error &&
+      `&:after {
+        transform: scale(1);
+        border-bottom-color: #f44336;
+      }
+    `}
     &:before {
       left: 0;
       right: 0;
@@ -141,6 +189,15 @@ const EditorContainer = styled.div`
       }
     }
   }
+`
+
+const IconButton = styled(MaterialIconButton)`
+  ${({ selected }) =>
+    selected &&
+    `background-color: rgba(63, 81, 181, .2) !important;
+      svg {
+        fill: #3f51b5 !important;
+      }`}
 `
 
 export default RichText
