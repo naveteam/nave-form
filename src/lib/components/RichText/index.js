@@ -16,7 +16,7 @@ import {
 
 import { values } from '../../helpers'
 
-const RichText = ({ name, required, label }) => {
+const RichText = ({ name, required, placeholder }) => {
   const { setValue, getValues, errors } = useFormContext()
   const [currentInlineStyles, setCurrentInlineStyles] = useState([])
   const [currentBlockStyle, setCurrentBlockStyle] = useState(null)
@@ -79,6 +79,8 @@ const RichText = ({ name, required, label }) => {
     )
   }
 
+  console.log(errors)
+
   return (
     <>
       <ControlsContainer>
@@ -97,7 +99,7 @@ const RichText = ({ name, required, label }) => {
           as={Editor}
           name={name}
           valueName='editorState'
-          placeholder={label}
+          placeholder={placeholder}
           defaultValue={EditorState.createEmpty()}
           handleKeyCommand={handleKeyCommand}
           onChange={([value]) => {
@@ -106,7 +108,9 @@ const RichText = ({ name, required, label }) => {
             }
             return value
           }}
-          rules={{ validate: value => !value.getCurrentContent().hasText() && required }}
+          rules={{
+            validate: value => (!value.getCurrentContent().hasText() ? required : undefined)
+          }}
         />
       </EditorContainer>
       <ErrorMessage as={FormHelperText} error={true} errors={errors} name={name} />

@@ -4,7 +4,6 @@ import { Grid } from '@material-ui/core'
 import { Form, Input, Select, RichText, ArrayOf, If, logger } from './lib'
 
 const App = () => {
-  const onSubmit = data => logger.json(data)
   const defaultValues = localStorage.getItem('@nave-form:data')
 
   const onSubmit = data => {
@@ -21,6 +20,9 @@ const App = () => {
   return (
     <Form onSubmit={onSubmit} {...(defaultValues && { defaultValues: JSON.parse(defaultValues) })} unmask>
       <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <RichText name='Bio' required='Campo obrigatório' placeholder='Fale um pouco de você aqui...' />
+        </Grid>
         <Grid item xs={6}>
           <Input
             name='cpf'
